@@ -28,17 +28,20 @@ def exploreData() :
 def plotDistribution() :
     sns.countplot(x='Smoker', data=dataset)
     plt.title('Distribution of Smoker')
+    plt.savefig('Smoker.png')
     plt.show()
 
 
 def plotDensity(x):
     sns.kdeplot(dataset[x], fill=True)
     plt.title(f'Density Plot for {x}')
+    plt.savefig(f'{x}.png')
     plt.show()
 
 def Visualize() :
-    sns.scatterplot(x='Age', y='BMI', hue='Region', data=dataset)
-    plt.title('Scatterplot of Age vs. BMI')
+    sns.scatterplot(x='Smoker', y='BMI', hue='Region', data=dataset)
+    plt.title('Scatterplot of region')
+    plt.savefig('region.png')
     plt.show()
 
 def knn () :
@@ -58,7 +61,11 @@ def knn () :
         accuracy = accuracy_score(y_test, y_pred)
         print(f"Accuracy for k={k}: {accuracy}")
 
-        # Additional metrics
+        roc_auc = roc_auc_score(y_test, knn_classifier.predict_proba(X_test)[:, 1])
+        print(f"ROC/AUC for k={k}: {roc_auc}")
+
+
+    # Additional metrics
         print(classification_report(y_test, y_pred))
         print(confusion_matrix(y_test, y_pred))
 
@@ -77,6 +84,10 @@ def DecisionTree() :
     accuracy = accuracy_score(y_test, y_pred)
     print(f"Accuracy for Decision Tree: {accuracy}")
 
+    roc_auc = roc_auc_score(y_test, dt_classifier.predict_proba(X_test)[:, 1])
+    print(f"ROC/AUC for Decision Tree: {roc_auc}")
+
+
     # Additional metrics
     print(classification_report(y_test, y_pred))
     print(confusion_matrix(y_test, y_pred))
@@ -94,6 +105,10 @@ def NaiveBayes() :
     accuracy = accuracy_score(y_test, y_pred)
     print(f"Accuracy for Naive Bayes: {accuracy}")
 
+    roc_auc = roc_auc_score(y_test, nb_classifier.predict_proba(X_test)[:, 1])
+    print(f"ROC/AUC for Naive Bayes: {roc_auc}")
+
+
     # Additional metrics
     print(classification_report(y_test, y_pred))
     print(confusion_matrix(y_test, y_pred))
@@ -110,6 +125,9 @@ def ANN() :
     # Model Evaluation
     accuracy_ann = accuracy_score(y_test, y_pred_ann)
     print(f"Accuracy for ANN: {accuracy_ann}")
+
+    roc_auc = roc_auc_score(y_test, ann_classifier.predict_proba(X_test)[:, 1])
+    print(f"ROC/AUC for ANN: {roc_auc}")
 
     # Additional metrics for ANN
     print(classification_report(y_test, y_pred_ann, zero_division=1))
