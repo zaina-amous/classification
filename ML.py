@@ -13,13 +13,13 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import learning_curve
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, roc_auc_score, roc_curve, auc
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, plot_tree
 
 # Load the dataset
 # dataset_url = "https://www.dropbox.com/scl/fi/8et6xuwh9luvfg03hhji3/Data.csv?rlkey=10s6tu2sgw5z3ft43qk3wey79&dl=0"
 col_names = ['Age', 'Gender', 'BMI', 'Region', 'No.Children', 'Insurance_Charges', 'Smoker']
 feature_columns = ['Age', 'Gender', 'BMI', 'Region', 'No.Children', 'Insurance_Charges']
-dataset = pd.read_csv(r"C:\Users\Asus ZenBook\Downloads\Data.csv",  skiprows=1, names=col_names)
+dataset = pd.read_csv(r"C:\Users\omar\Downloads\Data.csv",  skiprows=1, names=col_names)
 
 def exploreData() :
     print(dataset.head())
@@ -69,10 +69,12 @@ def knn () :
         print(classification_report(y_test, y_pred))
         print(confusion_matrix(y_test, y_pred))
 
-def DecisionTree() :
-    # Decision Tree Model Training
-    # Initialize Decision Tree Classifier (you can adjust hyperparameters as needed)
-    dt_classifier = DecisionTreeClassifier(random_state=42)
+
+def DecisionTreeC4_5():
+    # Decision Tree Model Training with C4.5 (Entropy)
+    # Initialize Decision Tree Classifier with 'entropy' criterion
+    # sklearn library implments c4.5 and CART if the criterion is entropy , c4.5 algorithm is used ... 
+    dt_classifier = DecisionTreeClassifier(criterion='entropy', random_state=42)
 
     # Fit the model on the training data
     dt_classifier.fit(X_train, y_train)
@@ -82,15 +84,19 @@ def DecisionTree() :
 
     # Model Evaluation
     accuracy = accuracy_score(y_test, y_pred)
-    print(f"Accuracy for Decision Tree: {accuracy}")
+    print(f"Accuracy for Decision Tree (C4.5): {accuracy}")
 
     roc_auc = roc_auc_score(y_test, dt_classifier.predict_proba(X_test)[:, 1])
-    print(f"ROC/AUC for Decision Tree: {roc_auc}")
-
+    print(f"ROC/AUC for Decision Tree (C4.5): {roc_auc}")
 
     # Additional metrics
     print(classification_report(y_test, y_pred))
     print(confusion_matrix(y_test, y_pred))
+
+    # Plot the Decision Tree
+    plt.figure(figsize=(20, 10))
+    plot_tree(dt_classifier, filled=True, feature_names=X_train.columns, class_names=['0', '1'])
+    plt.show()
 
 def NaiveBayes() :
     nb_classifier = GaussianNB()
@@ -151,7 +157,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Task 6 : KNN (using 3 different	values	of	K)
 knn();
 # Task 7 :	Decision	Trees (C4.5)
-DecisionTree();
+DecisionTreeC4_5();
 #Task 8  : Naive Bayes Classifier
 NaiveBayes();
 #Task 9 : Artificial Neural Network (ANN) with a Single Hidden Layer, Number of Epochs = 500, Sigmoid Activation Function
